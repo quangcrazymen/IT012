@@ -7,15 +7,15 @@
 	invalidChar: .asciiz "invalid type"
 	char: 	.word 1
 .text
-# ki tu a => 47<char<58 or 64<char<91or  96<char<123
+# ki tu char => 47<char<58 or 64<char<91or  96<char<123
 
 li $v0,8
 li $a1,2
 la $a0,buffer
 syscall
-lw $s0,($a0)	#char
+lw $s0,($a0)	#char (load content in add in $a0 to $s0, $s0.type=int)
 
-li $v0,4		#print char
+li $v0,4
 la $a0,string0
 syscall
 	
@@ -38,8 +38,8 @@ sgtu $t4,$s0,96
 slti $t5,$s0,123		#96<a<123
 and $s3,$t4,$t5
 
-or $s4,$s1,$s2
-or $s5,$s4,$s3
+or $s4,$s1,$s2		# $s4=(47<a<58)||(64<a<91)
+or $s5,$s4,$s3		# $s5 = $s4 ||(96<a<123)
 
 beqz $s5,invalid
 
@@ -48,9 +48,9 @@ la $a0,string1
 syscall
 
 li $v0,4
-subi $s1,$s0,1
-la $a0,char
-sw $s1,($a0)
+subi $s1,$s0,1		#prev char
+la $a0,char		# $a0.type=address
+sw $s1,($a0)		# $s1(int)->$a0(address)
 syscall
 
 la $a0,newline
@@ -60,7 +60,7 @@ la $a0,string2
 syscall
 
 addi $s1,$s0,1
-la $a0,char
+la $a0,char		#next char
 sw $s1,($a0)
 syscall
 

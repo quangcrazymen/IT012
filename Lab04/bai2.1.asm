@@ -1,7 +1,7 @@
 .data
 .text
 addi $s0,$s0,2	#i
-addi $s1,$s1,2	#j
+addi $s1,$s1,3	#j
 addi $s2,$s2,3	#f
 addi $t0, $t0, 10	#g
 addi $t1, $t1, 4	#h
